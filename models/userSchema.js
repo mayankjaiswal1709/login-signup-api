@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required : true,
   },
-  role: {
-    type: String,
-    default: true,
-  },
+  userRole:{
+    type:String,
+    default:"user",
+},
   isActive: {
     type: Boolean,
     default: true,

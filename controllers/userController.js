@@ -3,9 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const couldinary = require("../services/couldinary");
-// const mail = require("../services/emailService");
 const { unlinkSync } = require("fs");
 
+
+// signup api 
 const signUp = async (req, res) => {
   const registerData = new userSchema(req.body);
   try {
