@@ -1,5 +1,6 @@
 const easyinvoice = require('easyinvoice');
 const fs = require('fs');
+require('pdfjs-dist')
 
 var LocalStorage = require('node-localstorage').LocalStorage,
 localStorage = new LocalStorage('./scratch');
@@ -39,12 +40,12 @@ function generateInvoice(invoiceData) {
     "bottom-notice": "Kindly pay your invoice within 10 days."
   };
 
-  const randomNumber = Math.random() * 1000000; 
+  // const randomNumber = Math.random() * 1000000; 
   return new Promise((resolve, reject) => {
     easyinvoice.createInvoice(data, async function (result) {
       try {
         await fs.writeFileSync("invoice.pdf", result.pdf, 'base64');
-        result.pdf = result.pdf.replace("INVOICE_NUMBER", randomNumber.toString());
+        // result.pdf = result.pdf.replace("INVOICE_NUMBER", randomNumber.toString());
         resolve("Invoice generated successfully");
       } catch (error) {
         reject(error);

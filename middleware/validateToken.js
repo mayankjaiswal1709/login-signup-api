@@ -12,7 +12,7 @@ const validateToken = async (req, res, next) => {
         });
       } else {
         req.user = decoded.user;
-        console.log(decoded.user); // Login user details , Decode the value we pass for jwt payload(encode)
+        // console.log(decoded.user); // Login user details , Decode the value we pass for jwt payload(encode)
         next();
       }
     });
