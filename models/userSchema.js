@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
     type:String,
     default:"user",
 },
+assignedProjects: [{
+   type: mongoose.Schema.Types.ObjectId,
+   ref: 'Project' 
+  }],
   isActive: {
     type: Boolean,
     default: true,

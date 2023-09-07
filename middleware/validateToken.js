@@ -4,7 +4,7 @@ const validateToken = async (req, res, next) => {
   let authHeader = req.headers.Authorization || req.headers.authorization;
   if (authHeader && authHeader.startsWith("Bearer")) {
     let token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+    jwt.verify(token, process.env.JWT, (err, decoded) => {
       if (err) {
         res.status(401).json({
           success: false,

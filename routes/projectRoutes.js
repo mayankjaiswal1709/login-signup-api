@@ -4,11 +4,15 @@ const project = require('../controllers/projectController')
 const  upload  = require('../middleware/multer')
 const { isUser, isAdmin, isClient } = require('../middleware/authorization')
 
+// all route's are controlled by admin only
 router.post('/addproject',upload.single('project_image') , isClient, project.addProject)
-router.get('/allproject', project.getProjects)
-router.get('/projectsvianame/:project_name', project.getProjectsbyName)
-router.patch('/updateproject/:_id', isClient, project.updateProject)
+router.get('/allprojects',isAdmin, project.getProjects)
+router.get('/projectsvianame/:project_name',isAdmin, project.getProjectsbyName)
+router.get('/projectsviaid/:_id',isAdmin, project.getProjectsbyId)
+router.patch('/updateproject/:_id', isAdmin, project.updateProject)
 router.delete('/deleteproject/:_id',isAdmin, project.deleteProject)
 
 
-module.exports = router;
+
+
+module.exports = router; 

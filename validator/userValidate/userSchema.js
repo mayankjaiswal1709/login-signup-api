@@ -3,7 +3,7 @@ const joi = require("joi");
 const userSchema = {
   userSingup: joi
     .object({
-      userName: joi.string().required().min(6).max(10),
+      userName: joi.string().required().min(4).max(10),
       userEmail: joi.string().required().email(),
       userPassword: joi.string().required().max(16).min(6),
       userCity: joi.string().required(),

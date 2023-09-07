@@ -1,5 +1,6 @@
 const express = require('express')
 const taskSchema = require('../models/taskSchema')
+const ProjectSchema = require("../models/projectSchema");
 const uploads = require('../middleware/multer')
 const fs = require('fs')
 
@@ -36,7 +37,7 @@ const addTask = async (req, res) => {
 // see  all Tasks
 const getTasks = async (req, res) => {
     try {
-        const allTaskList = await taskSchema.find(req.body)
+        const allTaskList = await taskSchema.find()
         if (allTaskList != null) {
             return res.status(200).json({
                 sucess: true,
@@ -59,6 +60,33 @@ const getTasks = async (req, res) => {
     }
 }
 
+// ==================================
+const getTaskAssignedProjects = async (req, res) => {
+    try {
+      const projectId = req.body.projectId; // Assuming you have middleware to extract the user ID from the token
+       const alltask= await taskSchema.find({projectId:projectId});
+
+      if (alltask) {
+        res.status(200).json({
+          success: true,
+          message: "Assigned task for the project",
+          assignedProjects: alltask,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "task not found",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  };
+// ===========================  
+
 // edit Task 
 const editTask = async (req, res) => {
     try {
@@ -68,13 +96,13 @@ const editTask = async (req, res) => {
             await taskedit.save()
             res.status(200).json({
                 success: true,
-                message: "Task added successfull ",
+                message: "Task updated successfull ",
                 Taskedit: taskedit
             })
         } else {
             res.status(404).json({
                 success: false,
-                message: "No Task edited and updated try again "
+                message: "Task not  updated try again !! "
             })
         }
 
@@ -98,7 +126,7 @@ const deleteTask = async (req, res) => {
                 show:taskdeleted
             })
         } else {
-            res.success(404).json({
+            res.status(404).json({
                 success: false,
                 message: "No Task deleted try again"
             })
@@ -112,6 +140,6 @@ const deleteTask = async (req, res) => {
         })
     }
 }
-module.exports = { addTask, getTasks, editTask, deleteTask }
+module.exports = { addTask, getTasks, editTask, deleteTask,getTaskAssignedProjects }
 
 
