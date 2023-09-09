@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router()
 const bodyParser = require('body-parser');
 const invoiceController = require('../controllers/invoiceController');
+const { isAdmin } = require('../middleware/authorization');
 
 router.use(bodyParser.json());
 

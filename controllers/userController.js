@@ -141,7 +141,7 @@ const getUserByName = async (req,res)=>{
 // ====================
 const getUserAssignedProjects = async (req, res) => {
   try {
-    const userIdd = req.body.userId; // Assuming you have middleware to extract the user ID from the token
+    const userIdd = req.params.userId; // Assuming you have middleware to extract the user ID from the token
      const projects= await ProjectSchema.find({userId:userIdd});
    
     if (projects) {

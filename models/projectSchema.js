@@ -31,9 +31,14 @@ const projectSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  isActive: {
-    type: Boolean,
-    default: true,
+  mobile_no: {
+    type: String,
+    required: [true,"Please Enter Mobile number "],
+    maxLength:[10,"mobile no can not exceed 10 character "],
+  },
+  status: {
+    type: String,
+
   },
 });
 

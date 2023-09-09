@@ -6,9 +6,9 @@ const { isUser, isAdmin, isClient, isAdminAndUser } = require('../middleware/aut
 
 userRouter.post("/signup", upload.single('profilePic'), validate.singUpValidation, user.signUp);
 userRouter.post("/userlogin", user.userLogin);
-userRouter.get("/alluserlist",isAdmin, user.allUsersList);
-userRouter.get("/userbyname/:userName", isAdmin,user.getUserByName);
+userRouter.get("/alluserlist/:userRole?",isAdmin, user.allUsersList);
+userRouter.get("/userbyname/:userName/:userRole?", isAdmin,user.getUserByName);
 // In your user route
-userRouter.get('/assignedprojects', isUser, user.getUserAssignedProjects);
+userRouter.get('/assignedprojects/:uid',  user.getUserAssignedProjects);
 
 module.exports = userRouter;
