@@ -2,7 +2,7 @@ const JWT = require('jsonwebtoken')
 const User =require('../models/userSchema')
 
 const isUser = async (req, res, next) => {
-    if (req.body.userRole === "user") {
+    if (req.params.userRole === "user") {
         next();
     } else {
         return res.status(401).json({
@@ -13,7 +13,7 @@ const isUser = async (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-    if (req.body.userRole === "admin") {
+    if (req.params.userRole === "admin") {
         next();
     } else {
         return res.status(401).json({
@@ -24,7 +24,7 @@ const isAdmin = async (req, res, next) => {
 };
 
 const isAdminAndUser = async (req, res, next) => {
-    if (req.body.userRole === "admin" || req.body.userRole === "user") {
+    if (req.params.userRole === "admin" || req.params.userRole === "user") {
         next();
     } else {
         return res.status(401).json({
@@ -36,7 +36,7 @@ const isAdminAndUser = async (req, res, next) => {
 
 
 const isClient = async (req, res, next) => {
-    if (req.body.userRole === "client" || req.body.userRole === "admin") {
+    if (req.params.userRole === "client" || req.params.userRole === "admin") {
         next();
     } else {
         return res.status(401).json({

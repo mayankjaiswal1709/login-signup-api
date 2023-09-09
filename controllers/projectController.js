@@ -37,7 +37,8 @@ const addProject = async (req, res) => {
 // get all  Project
 const getProjects = async (req, res) => {
   try {
-    const allProject = await ProjectSchema.find({});
+    // const { userRole } = req.params;
+    const allProject = await ProjectSchema.find({  });
     if (allProject) {
       res.status(200).json({
         success: true,
