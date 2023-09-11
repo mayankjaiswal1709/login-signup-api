@@ -5,6 +5,7 @@ const taskRoutes = require("../taskRoute");
 const reviewRoutes = require("../reviewRouter");
 const invoicedRoutes = require("../invoiceRoutes");
 const assetsRoutes = require("../uploadAssetsRoutes");
+const clientRoutes = require("../clientRoutes");
 const validateToken = require("../../middleware/validateToken")
 
 router.use("/user", userRouter);
@@ -14,6 +15,7 @@ router.use("/task", taskRoutes);
 router.use("/review", reviewRoutes);
 router.use("/invoices", invoicedRoutes);
 router.use("/assets", assetsRoutes);
+router.use("/client", clientRoutes);
 
 
 module.exports = router;

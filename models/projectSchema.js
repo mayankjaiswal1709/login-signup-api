@@ -38,8 +38,20 @@ const projectSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-
   },
+  startDate: {
+    type: String,
+    required: [true,"Please Enter Project Start Date "],
+  },
+  endDate: {
+    type: String,
+  },
+  clientEmail: {
+    type: String,
+    required: [true,"Please Enter Client  Email"],
+    // unique:true,
+    // validate:[validator.isEmail,"Please Enter a valid Email"],
+},
 });
 
 projectSchema.set("timestamps", true);
