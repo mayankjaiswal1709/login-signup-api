@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const reviewSchema = new mongoose.Schema({
   subject: {
     type: String,
-    required: true,
+    required: [true,"Please Enter Subject "],
   },
   review: {
     type: String,
-    required: true,
+    required: [true,"Please Enter review "],
   },
   userId: {
     type: mongoose.Types.ObjectId,

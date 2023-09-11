@@ -5,7 +5,8 @@ const assetSchema = new mongoose.Schema({
  
     asset_files: {
     type: String,
-    requier: true,
+    required: [true,"Please Enter Asset "],
+
   }
 
 });

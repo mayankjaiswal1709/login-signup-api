@@ -14,15 +14,15 @@ const taskSchema = new mongoose.Schema({
     },
     task_name: {
         type: String,
-        require: true,
+        required: [true,"Please Enter Task Name "],
     },
     task_description: {
         type: String,
-        require: true,
+        required: [true,"Please Enter Task Description "],
     },
     task_image: {
         type: String,
-        require: true,
+        required: [true,"Please add task Image "],
     },
     task_status: {
         type: String,
