@@ -13,10 +13,14 @@ const clientSchema = new mongoose.Schema({
     type: Number,
     required: [true,"Please Enter Phone/Mobile Number "],
   },
+  clientCompanyName: {
+    type: String,
+    required: [true,"Please Enter Client Company Name "],
+  },
   userRole:{
     type:String,
     default:"client",
-},
+}, 
   isActive: {
     type: Boolean,
     default: true,
