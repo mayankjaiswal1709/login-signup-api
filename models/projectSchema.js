@@ -13,11 +13,11 @@ const projectSchema = new mongoose.Schema({
   },
   project_description: {
     type: String,
-    required: [true,"Please Enter Project Description "],
+    // required: [true,"Please Enter Project Description "],
   },
   project_price: {
     type: Number,
-    required: [true,"Please Enter Project Price "],
+    // required: [true,"Please Enter Project Price "],
   },
   project_categories: {
     type: String,
