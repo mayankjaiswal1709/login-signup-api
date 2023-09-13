@@ -33,7 +33,7 @@ const projectSchema = new mongoose.Schema({
   },
   mobile_no: {
     type: String,
-    required: [true,"Please Enter Mobile number "],
+    // required: [true,"Please Enter Mobile number "],
     // maxLength:[10,"mobile no. can not exceed 10 character "],
   },
   status: {
