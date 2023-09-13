@@ -23,7 +23,7 @@ router.post('/generate-invoice', async (req, res) => {
       error: error.message,
     });
   }
-});
+},isAdmin);
 
 
 

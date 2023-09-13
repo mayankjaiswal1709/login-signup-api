@@ -25,7 +25,7 @@ const projectSchema = new mongoose.Schema({
   },
   project_image: {
     type: String,
-    required: [true,"Please Add Project Image "],
+    // required: [true,"Please Add Project Image "],
   },
   project_company: {
     type: String,

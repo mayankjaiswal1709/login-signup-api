@@ -1,5 +1,6 @@
+const mongoose = require("mongoose");
 
-const mockDatabase = {
+const mockDatabase = new mongoose.Schema({
   sender: {
     "company": "IONINKS",
     "address": "visakhapatnam",
@@ -37,6 +38,8 @@ const mockDatabase = {
       "price": 5
     }
   ]
-};
+});
 
-module.exports = mockDatabase;
+mockDatabase.set("timestamps", true);
+module.exports = mongoose.model("innvoice", mockDatabase);
+// module.exports = ;

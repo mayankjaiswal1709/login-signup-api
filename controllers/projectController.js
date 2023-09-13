@@ -11,7 +11,7 @@ const addProject = async (req, res) => {
     const projectData = new ProjectSchema(req.body);
     // console.log(projectData);
     if (projectData != null) {
-      projectData.project_image = `/uploads/${req.file.filename}`;
+      // projectData.project_image = `/uploads/${req.file.filename}`;
       await projectData.save();
       res.status(200).json({
         success: true,

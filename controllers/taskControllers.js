@@ -85,6 +85,74 @@ const getTaskAssignedProjects = async (req, res) => {
       });
     }
   };
+// =========================== 
+
+// Get tasks by status
+const getTaskByStatus = async (req, res) => {
+    try {
+        const { status } = req.query; // Assuming you'll pass the status as a query parameter
+
+        if (!status) {
+            return res.status(400).json({
+                success: false,
+                message: "Status parameter is required",
+            });
+        }
+
+        const tasks = await taskSchema.find({ task_status: status });
+
+        if (tasks.length > 0) {
+            return res.status(200).json({
+                success: true,
+                message: `Tasks with status '${status}'`,
+                tasks,
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: `No tasks found with status '${status}'`,
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error.message,
+        });
+    }
+};
+
+// ================================
+const updateTaskStatus = async (req, res) => {
+    try {
+        const { _id } = req.params;
+        const { task_status } = req.body; // Assuming you send the new status in the request body
+
+        const updatedTask = await taskSchema.findByIdAndUpdate(
+            _id,
+            { task_status },
+            { new: true } // To get the updated document after the update
+        );
+
+        if (!updatedTask) {
+            return res.status(404).json({
+                success: false,
+                message: "Task not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Task status updated successfully",
+            updatedTask,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error.message,
+        });
+    }
+};
+
 // ===========================  
 
 // edit Task 
@@ -140,6 +208,12 @@ const deleteTask = async (req, res) => {
         })
     }
 }
-module.exports = { addTask, getTasks, editTask, deleteTask,getTaskAssignedProjects }
+module.exports = { addTask, 
+     getTasks, 
+     editTask,
+     deleteTask,
+     getTaskAssignedProjects,
+     getTaskByStatus,
+     updateTaskStatus }
 
 
