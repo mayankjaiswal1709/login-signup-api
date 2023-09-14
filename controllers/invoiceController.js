@@ -1,5 +1,6 @@
 const easyinvoice = require('easyinvoice');
 const fs = require('fs');
+// const path = require('path');
 const InvoiceSchema = require('../models/invoiceSchema');
 require('pdfjs-dist')
 
@@ -11,7 +12,7 @@ require('pdfjs-dist')
 // Function to generate an invoice
 const generateInvoice= async(invoiceData)=> {
   const currentDate = new Date().toLocaleString();
-console.log(invoiceData);
+// console.log(invoiceData);
 
   // var userId = localStorage.getItem("userId")
 
@@ -44,17 +45,27 @@ console.log(invoiceData);
   // console.log(data);
  const invoice = new InvoiceSchema(data)
  const invoiceDataa =  await invoice.save()
-//  console.log(invoiceDataa);
 
 
-  // const randomNumber = Math.random() * 1000000; 
   return new Promise((resolve, reject) => {
     easyinvoice.createInvoice(data, async function (result) {
       try {
-        await fs.writeFileSync("invoice.pdf", result.pdf, 'base64');
+        const timestamp = Date.now();
+        const pdfFileName = `invoice_${timestamp}.pdf`;
 
-        // result.pdf = result.pdf.replace("INVOICE_NUMBER", randomNumber.toString());
-        resolve("Invoice generated successfully");
+        await fs.writeFileSync(pdfFileName, result.pdf, 'base64')
+        console.log(pdfFileName);
+
+        const invoice = new InvoiceSchema({
+          ...data,
+          path: pdfFileName, // Store the PDF path in the database
+        });
+        await invoice.save();
+
+        resolve({
+          message:"Invoice generated successfully",
+          pdfPath:pdfFileName,
+        });
   
       } catch (error) {
         reject(error);
@@ -69,9 +80,13 @@ const genrateInvoiceController = async (req, res) => {
     const data = req.body;
     // You can add validation here to ensure the data is provided correctly
     const result = await generateInvoice(data);
+
+    res.setHeader('Content-Disposition', `attachment; filename="${result.pdfPath}"`);
+
     res.status(200).json({
       success: true,
-      message: result,
+      message: result.message,
+      pdfPath: result.pdfPath
     });
   } catch (error) {
     res.status(500).json({
