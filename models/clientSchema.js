@@ -17,6 +17,10 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: [true,"Please Enter Client Company Name "],
   },
+  clientCompanyAddress: {
+    type: String,
+    required: [true,"Please Enter Client Company address "],
+  },
   userRole:{
     type:String,
     default:"client",
