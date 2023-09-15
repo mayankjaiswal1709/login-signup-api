@@ -10,7 +10,7 @@ require('pdfjs-dist')
 
 
 // Function to generate an invoice
-const generateInvoice= async(invoiceData)=> {
+const generateInvoice = async(invoiceData)=> {
   const currentDate = new Date().toLocaleString();
 // console.log(invoiceData);
 
@@ -96,7 +96,7 @@ const genrateInvoiceController = async (req, res) => {
   }
 }
 
-
+// get all invoice ==========================================
 const getAllInvoice = async (req, res) => {
   try {
 
@@ -121,9 +121,37 @@ const getAllInvoice = async (req, res) => {
   }
 };
 
+// get invoice by id==================================================
+const getInvoicebyId = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const allInvoice = await InvoiceSchema.find({ _id });
+    if (allInvoice) {
+      res.status(200).json({
+        success: true,
+        message: "all Project list below",
+        ProjectLists: allInvoice,
+      });
+    } else {
+      res.status(404)({
+        success: false,
+        message: "no Project found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+
+
 
 module.exports = {
   generateInvoice,
   genrateInvoiceController,
-  getAllInvoice
+  getAllInvoice,
+  getInvoicebyId
 };

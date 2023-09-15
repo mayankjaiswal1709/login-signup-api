@@ -61,32 +61,7 @@ const getTasks = async (req, res) => {
 }
 
 // ==================================
-// const getTaskAssignedProjects = async (req, res) => {
-//     try {
-//       const projectid = req.params.projectId; // Assuming you have middleware to extract the user ID from the token
-//       console.log(projectid);
-//        const alltask = await taskSchema.find({projectid:projectid});
 
-//       if (alltask) {
-//         res.status(200).json({
-//           success: true,
-//           message: "Assigned task for the project",
-//           assignedProjects: alltask,
-//         });
-//       } else {
-//         res.status(404).json({
-//           success: false,
-//           message: "task not found",
-//         });
-//       }
-//     } catch (error) {
-//       res.status(500).json({
-//         success: false,
-//         error: error.message,
-//       });
-//     }
-//   };
-// =========================== 
 const getTaskAssignedProjects = async (req, res) => {
     try {
       const projectIdd = req.params.projectId; 

@@ -3,19 +3,28 @@ const clientSchema = require('../models/clientSchema')
 // const ProjectSchema = require("../models/projectSchema");
 // const uploads = require('../middleware/multer')
 const fs = require('fs')
+const jwt = require('jsonwebtoken')
+const  transporter  = require('../services/emailService')
 
 // add Task api
 const addClient = async (req, res) => {
     try {
         const clientData = new clientSchema(req.body);
         if (clientData != null) {
-            // clientData.task_image = `/uploads/${(req.file.filename)}`;
-            // clientData.userId = req.userId;
-            // clientData.projectId = req.params.pid;
+            // let token = jwt.sign({ clientId: clientData._id }, process.env.jwt, { expiresIn: "10m" })
+            const signuplink = `http://localhost:8000/user/signup`
+            await transporter.sendMail({
+                from: process.env.Email,
+                to: req.body.clientEmail,
+                subject: "Signup Request from IONINKS",
+                html: `<p>Client has been created by IONINKS </p> 
+                <a href="${signuplink}">Click on the link to Signup to IONINKS</a>`,
+
+            })
             await clientData.save();
             res.status(200).json({
                 success: true,
-                message: "client Added Successfully",
+                message: "Client Added Successfully and mail sended to client",
                 Task: clientData,
             })
         } else {
