@@ -8,7 +8,7 @@ router.post('/addtask/:pid/:userRole?',isAdmin, task.addTask)
 router.get('/getalltask', task.getTasks)
 router.get('/getassignedtasktoprject/:projectId', task.getTaskAssignedProjects)
 router.get('/gettaskstatus', task.getTaskByStatus)
-router.patch('/updatetaskstatus/:_id', isAdmin, task.updateTaskStatus);
+router.patch('/updatetaskstatus/:_id/:userRole?', isAdmin, task.updateTaskStatus);
 router.patch('/updatetask/:_id/:userRole?', isAdmin, task.editTask)
 router.delete('/deltetask/:_id/:userRole?', isAdmin, task.deleteTask)
 
