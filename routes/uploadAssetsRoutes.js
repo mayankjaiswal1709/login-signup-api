@@ -1,6 +1,7 @@
 const assestsRouter = require("express").Router();
 const upload = require('../middleware/multer')
 const assests = require("../controllers/assets");
+const { isUser, isAdmin, isClient } = require('../middleware/authorization')
 
 
 const fileSizeLimitErrorHandler = (err, req, res, next) => {
@@ -14,6 +15,6 @@ const fileSizeLimitErrorHandler = (err, req, res, next) => {
     }
   }
 
-assestsRouter.post("/upload", upload.single('asset_files'),fileSizeLimitErrorHandler, assests.uploadAssets);
+assestsRouter.post("/upload/:userRole?", isClient ,upload.single('asset_files'),fileSizeLimitErrorHandler, assests.uploadAssets);
 
 module.exports = assestsRouter;
