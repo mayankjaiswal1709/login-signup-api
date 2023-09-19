@@ -1,5 +1,6 @@
 const express = require('express')
 const clientSchema = require('../models/clientSchema')
+const ProjectSchema = require("../models/projectSchema");
 // const ProjectSchema = require("../models/projectSchema");
 // const uploads = require('../middleware/multer')
 const fs = require('fs')
@@ -70,5 +71,31 @@ const getAllClients = async (req, res) => {
         })
     }
 }
-module.exports = { addClient ,getAllClients}
+
+const getClientProjects = async (req, res) => {
+    const clientEmail = req.params.emailId;
+  
+    try {
+      const projects = await ProjectSchema.find({ clientEmail });
+  
+      if (projects) {
+        res.status(200).json({
+          success: true,
+          message: "Client projects",
+          assignedProjects: projects,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "No projects found for client",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  };
+module.exports = { addClient ,getAllClients,getClientProjects}
 

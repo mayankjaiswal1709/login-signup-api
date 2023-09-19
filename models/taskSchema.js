@@ -14,12 +14,12 @@ const taskSchema = new mongoose.Schema({
     },
     task_name: {
         type: String,
-        required: [true,"Please Enter Task Name "],
+        // required: [true,"Please Enter Task Name "],
     },
-    // task_description: {
-    //     type: String,
-    //     required: [true,"Please Enter Task Description "],
-    // },
+    task_description: {
+        type: String,
+        // required: [true,"Please Enter Task Description "],
+    },
     // task_image: {
     //     type: String,
     //     required: [true,"Please add task Image "],
@@ -27,12 +27,13 @@ const taskSchema = new mongoose.Schema({
     task_status: {
         type: String,
         require: true,
+        // required: [true,"Please Enter Task Description "],
     },
        
-    // task_deadline: {
-    //     type: String,
-    //     default: 0,
-    // },
+    task_priority: {
+        type: String,
+       
+    },
     isActive: {
         type: Boolean,
         default: true

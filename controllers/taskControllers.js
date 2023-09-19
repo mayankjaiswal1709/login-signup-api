@@ -7,11 +7,13 @@ const fs = require('fs')
 // add Task api
 const addTask = async (req, res) => {
     try {
+         
         const taskData = new taskSchema(req.body);
         if (taskData != null) {
             // taskData.task_image = `/uploads/${(req.file.filename)}`;
             taskData.userId = req.userId;
             taskData.projectId = req.params.pid;
+
             await taskData.save();
             res.status(200).json({
                 success: true,
