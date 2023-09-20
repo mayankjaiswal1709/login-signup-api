@@ -3,6 +3,7 @@ const userSchema = require("../models/userSchema");
 const ProjectSchema = require("../models/projectSchema");
 const fs = require("fs");
 const uploads = require("../middleware/multer");
+const taskSchema = require("../models/taskSchema");
 
 // FOR admin ALL API'S
 // add Project api
@@ -38,7 +39,12 @@ const addProject = async (req, res) => {
 const getProjects = async (req, res) => {
   try {
     // const { userRole } = req.params;
-    const allProject = await ProjectSchema.find({  });
+     
+    const allProject = await ProjectSchema.find().populate("project_tasks");
+    for (let i = 0; i < allProject.length; i++) {
+      const allTasks = await taskSchema.find({projectId:allProject[i]._id});  
+      Array.prototype.push.apply(allProject[i].project_tasks, allTasks);  
+    }
     if (allProject) {
       res.status(200).json({
         success: true,
@@ -87,7 +93,11 @@ const getProjectsbyName = async (req, res) => {
 const getProjectsbyId = async (req, res) => {
   try {
     const { _id } = req.params;
-    const allProject = await ProjectSchema.find({ _id });
+    const allProject = await ProjectSchema.find({ _id }).populate("project_tasks");
+    const allTasks = await taskSchema.find({projectId:_id});
+    
+    Array.prototype.push.apply(allProject[0].project_tasks, allTasks);
+  
     if (allProject) {
       res.status(200).json({
         success: true,

@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
 
 const projectSchema = new mongoose.Schema({
-
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     // required: true,
-    ref:"userData"
+    ref: "userData",
   },
   project_name: {
     type: String,
-    required: [true,"Please Enter Project Name "],
+    required: [true, "Please Enter Project Name "],
   },
   project_description: {
     type: String,
@@ -21,7 +20,7 @@ const projectSchema = new mongoose.Schema({
   },
   project_categories: {
     type: String,
-    required: [true,"Please Enter Project Categories "],
+    required: [true, "Please Enter Project Categories "],
   },
   project_image: {
     type: String,
@@ -29,7 +28,7 @@ const projectSchema = new mongoose.Schema({
   },
   project_company: {
     type: String,
-    required: [true,"Please Enter project company "],
+    required: [true, "Please Enter project company "],
   },
   mobile_no: {
     type: String,
@@ -41,17 +40,24 @@ const projectSchema = new mongoose.Schema({
   },
   startDate: {
     type: String,
-    required: [true,"Please Enter Project Start Date "],
+    required: [true, "Please Enter Project Start Date "],
   },
   endDate: {
     type: String,
   },
   clientEmail: {
     type: String,
-    required: [true,"Please Enter Client  Email"],
+    required: [true, "Please Enter Client  Email"],
     // unique:true,
     // validate:[validator.isEmail,"Please Enter a valid Email"],
-},
+  },
+  project_tasks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      // required: true,
+      ref: "task",
+    },
+  ],
 });
 
 projectSchema.set("timestamps", true);

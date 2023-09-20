@@ -5,7 +5,8 @@ const ProjectSchema = require("../models/projectSchema");
 // const uploads = require('../middleware/multer')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
-const  transporter  = require('../services/emailService')
+const  transporter  = require('../services/emailService');
+const taskSchema = require('../models/taskSchema');
 
 // add Task api
 const addClient = async (req, res) => {
@@ -76,13 +77,18 @@ const getClientProjects = async (req, res) => {
     const clientEmail = req.params.emailId;
   
     try {
-      const projects = await ProjectSchema.find({ clientEmail });
+    
+      const allProject = await ProjectSchema.find({ clientEmail }).populate("project_tasks");
+      for (let i = 0; i < allProject.length; i++) {
+        const allTasks = await taskSchema.find({projectId:allProject[i]._id});  
+        Array.prototype.push.apply(allProject[i].project_tasks, allTasks);  
+      }
   
-      if (projects) {
+      if (allProject) {
         res.status(200).json({
           success: true,
           message: "Client projects",
-          assignedProjects: projects,
+          assignedProjects: allProject,
         });
       } else {
         res.status(404).json({

@@ -5,6 +5,7 @@ const taskSchema = new mongoose.Schema({
     projectId: {
         type: mongoose.Schema.Types.ObjectId,
         require: true,
+        ref:"Project"
     
     },
     userId: {

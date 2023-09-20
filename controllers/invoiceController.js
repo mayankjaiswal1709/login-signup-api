@@ -2,6 +2,8 @@ const easyinvoice = require('easyinvoice');
 const fs = require('fs');
 // const path = require('path');
 const InvoiceSchema = require('../models/invoiceSchema');
+const clientSchema = require('../models/clientSchema');
+const invoiceSchema = require('../models/invoiceSchema');
 require('pdfjs-dist')
 
 // var LocalStorage = require('node-localstorage').LocalStorage,
@@ -105,7 +107,7 @@ const getAllInvoice = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "all Invoice list below",
-        ProjectList: allInvoice,
+        InvoiceList: allInvoice,
       });
     } else {
       res.status(404)({
@@ -130,7 +132,7 @@ const getInvoicebyId = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "all Project list below",
-        ProjectLists: allInvoice,
+        InvoiceList: allInvoice,
       });
     } else {
       res.status(404)({
@@ -147,11 +149,38 @@ const getInvoicebyId = async (req, res) => {
 };
 
 
+const getAllInvoiceByClientId = async (req, res) => {
+  try {
+
+    const clientId = req.params.cid; 
+    // console.log(clientId);
+    const allInvoice = await InvoiceSchema.find({'client.company':clientId});
+  
+    if (allInvoice) {
+      res.status(200).json({
+        success: true,
+        message: "all Invoice list below1",
+        InvoiceList: allInvoice,
+      });
+    } else {
+      res.status(404)({
+        success: false,
+        message: "no Invoice found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 
 module.exports = {
   generateInvoice,
   genrateInvoiceController,
   getAllInvoice,
-  getInvoicebyId
+  getInvoicebyId,
+  getAllInvoiceByClientId
 };
