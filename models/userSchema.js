@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   userRole:{
     type:String,
-    default:"user",
+    default:"client",
 },
 assignedProjects: [{
    type: mongoose.Schema.Types.ObjectId,
