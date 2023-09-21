@@ -1,94 +1,84 @@
-const easyinvoice = require('easyinvoice');
-const fs = require('fs');
-// const path = require('path');
-const InvoiceSchema = require('../models/invoiceSchema');
-const clientSchema = require('../models/clientSchema');
-const invoiceSchema = require('../models/invoiceSchema');
-require('pdfjs-dist')
 
-// var LocalStorage = require('node-localstorage').LocalStorage,
-// localStorage = new LocalStorage('./scratch');
-
-
+const easyinvoice = require("easyinvoice");
+const fs = require("fs");
+const cloudinary = require("../services/couldinary");
+const InvoiceSchema = require("../models/invoiceSchema");
+const clientSchema = require("../models/clientSchema");
+const invoiceSchema = require("../models/invoiceSchema");
+require("pdfjs-dist");
 
 // Function to generate an invoice
-const generateInvoice = async(invoiceData)=> {
+const generateInvoice = async (invoiceData) => {
+  // Validate the data
+  const requiredFields = ["client", "products"];
+
+  for (const field of requiredFields) {
+    if (!invoiceData[field]) {
+      throw new Error(`${field} field is required`);
+    }
+  }
+
+  // Generate the PDF file
   const currentDate = new Date().toLocaleString();
-// console.log(invoiceData);
-
-  // var userId = localStorage.getItem("userId")
-
-  var client = {
-    "company": invoiceData.client.company,
-    "address": invoiceData.client.address,
-    "zip": invoiceData.client.zip,
-    "city":  invoiceData.client.city,
-    "country": invoiceData.client.country 
-   }
-  
   const data = {
-    "customize": {
+    customize: {
       // "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
     },
-    "images": {
+    images: {
       // "logo": senderData.logo,
       // "background": senderData.background
     },
-    "sender": invoiceData.sender,
-    "client": client,
-    "information": {
-      "number": Date.now(),
-      "date": currentDate,
+    sender: invoiceData.sender,
+    client: invoiceData.client,
+    information: {
+      number: Date.now(),
+      date: currentDate,
       "due-date": "",
     },
-    "products": invoiceData.products,
-    "bottom-notice": "Kindly pay your invoice within 10 days."
+    products: invoiceData.products,
+    "bottom-notice": "Kindly pay your invoice within 10 days.",
   };
-  // console.log(data);
- const invoice = new InvoiceSchema(data)
- const invoiceDataa =  await invoice.save()
 
+  const invoice = new InvoiceSchema(data);
+  const result = await easyinvoice.createInvoice(data);
 
-  return new Promise((resolve, reject) => {
-    easyinvoice.createInvoice(data, async function (result) {
-      try {
-        const timestamp = Date.now();
-        const pdfFileName = `invoice_${timestamp}.pdf`;
+  // Upload the PDF file to Cloudinary
+  const timestamp = Date.now();
+  const pdfFileName = `invoice_${timestamp}.pdf`;
+  await fs.writeFileSync(pdfFileName, result.pdf, "base64");
 
-        await fs.writeFileSync(pdfFileName, result.pdf, 'base64')
-        console.log(pdfFileName);
+  const cloudinaryPublicUrl = await uploadPdfToCloudinary(pdfFileName);
 
-        const invoice = new InvoiceSchema({
-          ...data,
-          path: pdfFileName, // Store the PDF path in the database
-        });
-        await invoice.save();
+  // Store the PDF path in the database
+  invoice.path = cloudinaryPublicUrl;
+  await invoice.save();
 
-        resolve({
-          message:"Invoice generated successfully",
-          pdfPath:pdfFileName,
-        });
-  
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
-}
+  return {
+    message: "Invoice generated successfully",
+    pdfPath: cloudinaryPublicUrl,
+  };
+};
 
+// Function to upload a PDF file to Cloudinary
+const uploadPdfToCloudinary = async (pdfFileName) => {
+  const result = await cloudinary.uploader.upload(pdfFileName);
+  return result.secure_url;
+};
+
+// Controller function to generate an invoice
 const genrateInvoiceController = async (req, res) => {
   try {
-    // Get sender data, client data, and products data from the request body
-    const data = req.body;
-    // You can add validation here to ensure the data is provided correctly
-    const result = await generateInvoice(data);
+    // Get the invoice data from the request body
+    const invoiceData = req.body;
 
-    res.setHeader('Content-Disposition', `attachment; filename="${result.pdfPath}"`);
+    // Generate the invoice
+    const result = await generateInvoice(invoiceData);
 
+    // Return the PDF path
     res.status(200).json({
       success: true,
       message: result.message,
-      pdfPath: result.pdfPath
+      pdfPath: result.pdfPath,
     });
   } catch (error) {
     res.status(500).json({
@@ -96,13 +86,11 @@ const genrateInvoiceController = async (req, res) => {
       error: error.stack,
     });
   }
-}
-
+};
 // get all invoice ==========================================
 const getAllInvoice = async (req, res) => {
   try {
-
-    const allInvoice = await InvoiceSchema.find({  });
+    const allInvoice = await InvoiceSchema.find({});
     if (allInvoice) {
       res.status(200).json({
         success: true,
@@ -148,14 +136,12 @@ const getInvoicebyId = async (req, res) => {
   }
 };
 
-
 const getAllInvoiceByClientId = async (req, res) => {
   try {
-
-    const clientId = req.params.cid; 
+    const clientId = req.params.cid;
     // console.log(clientId);
-    const allInvoice = await InvoiceSchema.find({'client.company':clientId});
-  
+    const allInvoice = await InvoiceSchema.find({ "client.company": clientId });
+
     if (allInvoice) {
       res.status(200).json({
         success: true,
@@ -176,11 +162,10 @@ const getAllInvoiceByClientId = async (req, res) => {
   }
 };
 
-
 module.exports = {
   generateInvoice,
   genrateInvoiceController,
   getAllInvoice,
   getInvoicebyId,
-  getAllInvoiceByClientId
+  getAllInvoiceByClientId,
 };

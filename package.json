@@ -34,6 +34,6 @@
     "pdfkit": "^0.13.0",
     "save-dev": "^0.0.1-security",
     "short-uuid": "^4.2.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   }
 }
