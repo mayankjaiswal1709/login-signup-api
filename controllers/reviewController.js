@@ -57,7 +57,7 @@ const updateReviewById = async (req, res) => {
   const { id } = req.params;
   try {
     const reviewData = await reviewSchema.findByIdAndUpdate(id, req.body);
-    if (reviewData != "") {
+    if (reviewData) {
       await reviewData.save();
       return res.status(200).json({
         status: true,
@@ -74,7 +74,7 @@ const updateReviewById = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       status: false,
-      error: err.message,
+      error: err.stack,
     });
   }
 };

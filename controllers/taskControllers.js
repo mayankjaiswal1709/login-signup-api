@@ -129,8 +129,7 @@ const updateTaskStatus = async (req, res) => {
         const { _id } = req.params;
         const { task_status } = req.body; // Assuming you send the new status in the request body
 
-        const updatedTask = await taskSchema.findByIdAndUpdate(
-            _id,
+        const updatedTask = await taskSchema.findByIdAndUpdate(_id,
             { task_status },
             { new: true } // To get the updated document after the update
         );
