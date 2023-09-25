@@ -18,20 +18,20 @@ const signUp = async (req, res) => {
       userEmail: req.body.userEmail,
     });
     if (isUserExists) {
-      req.file ? unlinkSync(req.file.path) : null // Delete multer unnecessary uploaded photo
+      // req.file ? unlinkSync(req.file.path) : null // Delete multer unnecessary uploaded photo
       res.status(409).json({
         success: false,
         message: "User is already existed with this email",
       });
     } else {
-      if (req.file !== undefined) {
-        const result = await couldinary.uploader.upload(req.file.path, {
-          public_id: `${registerData._id}_${Date.now()}_ProfilePIC`,
-        });
-        registerData.profilePic = result.url;
-      }
+      // if (req.file !== undefined) {
+      //   const result = await couldinary.uploader.upload(req.file.path, {
+      //     public_id: `${registerData._id}_${Date.now()}_ProfilePIC`,
+      //   });
+      //   registerData.profilePic = result.url;
+      // }
       registerData.userPassword = await bcrypt.hash(req.body.userPassword, 10);
-      
+
       const user = await registerData.save();
 
       localStorage.setItem("userId",user._id)
@@ -43,6 +43,7 @@ const signUp = async (req, res) => {
         data: user,
         // userId: user._id
       });
+   
     }
   } catch (error) {
     res.status(400).json({
@@ -51,6 +52,48 @@ const signUp = async (req, res) => {
     });
   }
 };
+//--------------------
+// const signUp = async (req, res) => {
+//   const registerData = new userSchema(req.body);
+  
+//   try {
+//     const isUserExists = await userSchema.findOne({
+//       userEmail: req.body.userEmail,
+//     });
+
+//     if (isUserExists) {
+//       res.status(409).json({
+//         success: false,
+//         message: "User already exists with this email",
+//       });
+//     } else {
+//       const { userPassword } = req.body;
+      
+//       if (!userPassword) {
+//         res.status(400).json({
+//           success: false,
+//           message: "Password is required",
+//         });
+//         return;
+//       }
+
+//       registerData.userPassword = await bcrypt.hash(userPassword, 10);
+//       const user = await registerData.save();
+
+    
+//       res.status(201).json({
+//         success: true,
+//         message: "Registered successfully",
+//         data: user,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       Error: `Error occurred: ${error.message}`,
+//     });
+//   }
+// };
 
 
 // user login API

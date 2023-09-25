@@ -25,10 +25,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: [true,"Please Enter Phone/Mobile Number "],
   },
-  profilePic: {
-    type: String,
-    required: [false,"Please Add profile pic "],
-  },
+  // profilePic: {
+  //   type: String,
+  //   // required: [false,"Please Add profile pic "],
+  // },
   userRole:{
     type:String,
     default:"client",

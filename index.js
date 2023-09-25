@@ -10,8 +10,6 @@ var upload = multer();
 const app = express();
 
 // app.use(upload.array()); 
-
-
 app.use(express.json());
 
 app.use(cors());
