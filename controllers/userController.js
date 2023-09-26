@@ -113,7 +113,8 @@ const userLogin = async (req, res) => {
               return res.status(200).json({
                   success: true,
                   message: "Login successfully",
-                  token: token
+                  token: token,
+                  userId: userData._id
               })
           } else {
               return res.status(401).json({

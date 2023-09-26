@@ -103,5 +103,38 @@ const getClientProjects = async (req, res) => {
       });
     }
   };
-module.exports = { addClient ,getAllClients,getClientProjects}
+  // ------------------------------
+const getClientProjectsbyid = async (req, res) => {
+  
+  try {
+    console.log("hyeeeee")
+    const userId = req.params.cId;
+    
+      const allProject = await ProjectSchema.find({ userId }).populate("project_tasks");
+      for (let i = 0; i < allProject.length; i++) {
+        const allTasks = await taskSchema.find({projectId:allProject[i]._id});  
+        Array.prototype.push.apply(allProject[i].project_tasks, allTasks);  
+      }
+
+  
+      if (allProject) {
+        res.status(200).json({
+          success: true,
+          message: "Client projects",
+          assignedProjects: allProject,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "No projects found for client",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  };
+module.exports = { addClient ,getAllClients,getClientProjects,getClientProjectsbyid}
 
