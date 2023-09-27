@@ -187,13 +187,14 @@ const getUserByName = async (req,res)=>{
 
 // get userclient details by id
 const getuserClientbyId = async (req, res) =>{
-  const { _id } = req.params;
-    const userClient = await userSchema.findById({ _id })
-    // console.log(userClient);
-  const clientEmail = userClient.userEmail
+  
   // console.log(_id);
 
   try {
+    const { _id } = req.params;
+    const userClient = await userSchema.findById({ _id })
+    console.log(userClient);
+  const clientEmail = userClient.userEmail
   
     const allProject = await ProjectSchema.find({ clientEmail }).populate("project_tasks");
     for (let i = 0; i < allProject.length; i++) {
