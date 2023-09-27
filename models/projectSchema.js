@@ -45,6 +45,11 @@ const projectSchema = new mongoose.Schema({
   endDate: {
     type: String,
   },
+  clientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    // required: true,
+    ref: "clientData",
+  },
   clientEmail: {
     type: String,
     required: [true, "Please Enter Client  Email"],

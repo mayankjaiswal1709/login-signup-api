@@ -89,7 +89,7 @@ const getProjectsbyName = async (req, res) => {
     });
   }
 };
-// get all  Project via id
+// get   Project via id
 const getProjectsbyId = async (req, res) => {
   try {
     const { _id } = req.params;

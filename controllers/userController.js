@@ -180,8 +180,84 @@ const getUserByName = async (req,res)=>{
     })
   }
 } 
-
-
+// get userclient details by id
+const getuserClientbyId = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const userClient = await userSchema.findById({ _id })
+    if (userClient ) {
+      res.status(200).json({
+        success: true,
+        message: "Client Details listed below ",
+        ClientDetails: userClient,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "no Clinet found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+// ==========================
+// update client details
+const updateUserClientDetails = async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const updateUCDetails = await userSchema.findByIdAndUpdate({ _id },req.body);
+    if (updateUCDetails != null) {
+      await updateUCDetails.save();
+      return res.status(200).json({
+        success: true,
+        message: "Client details updated successfully",
+        updatedDetaisl:updateUCDetails
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "no such Client",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+// ==============================
+// delete user/clinet 
+const deleteUserClient = async (req, res) => {
+  const { _id } = req.params;
+  const deteleUserClient = await userSchema.findByIdAndDelete(
+    { _id },
+    req.body
+  );
+  try {
+    if (deteleUserClient != null) {
+      res.status(200).json({
+        success: true,
+        message: "your client deleted successfully",
+        deletedClient:deteleUserClient
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Project not deleted try again",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 // ====================
 const getUserAssignedProjects = async (req, res) => {
   try {
@@ -213,7 +289,9 @@ module.exports = {
   signUp,
   userLogin,
   allUsersList,
+  getuserClientbyId,
   getUserByName,
+  updateUserClientDetails,
+  deleteUserClient,
   getUserAssignedProjects
-  // userProjectAssign
 };

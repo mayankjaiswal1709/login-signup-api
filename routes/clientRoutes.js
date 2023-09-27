@@ -5,6 +5,9 @@ const { isUser, isAdmin, isClient, isAdminAndUser } = require('../middleware/aut
 
 clientRouter.post("/addclient/:userRole?",isAdmin, client.addClient);
 clientRouter.get("/allclientlist/:userRole?",isAdmin, client.getAllClients);
+clientRouter.get("/getclientdetails/:_id/:userRole?",isAdmin, client.getClientbyId);
+clientRouter.patch('/updateclient/:_id/:userRole?', isAdmin, client.updateClientDetails)
+clientRouter.delete('/deleteclient/:_id/:userRole?', isAdmin, client.deleteClient)
 clientRouter.get("/clients/:emailId/:userRole?", isClient, client.getClientProjects);
-clientRouter.get("/clients/:cId/:userRole?", isClient, client.getClientProjectsbyid);
+clientRouter.get("/getclientprojectsbyid/:_id/:userRole?", isClient, client.getClientProjectsByClientId);
 module.exports = clientRouter;
