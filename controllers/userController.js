@@ -184,13 +184,14 @@ const getUserByName = async (req,res)=>{
 // const { _id } = req.params;
 //     const userClient = await userSchema.findById({ _id })
 //     console.log(userClient);
+
 // get userclient details by id
 const getuserClientbyId = async (req, res) =>{
   const { _id } = req.params;
     const userClient = await userSchema.findById({ _id })
-    console.log(userClient);
+    // console.log(userClient);
   const clientEmail = userClient.userEmail
-  console.log(_id);
+  // console.log(_id);
 
   try {
   
@@ -300,36 +301,6 @@ const getUserAssignedProjects = async (req, res) => {
   }
 };
 // ==========================================
-const getUserClientProjects = async (req, res) => {
-  const clientEmail = req.params.emailId;
-
-  try {
-  
-    const allProject = await ProjectSchema.find({ clientEmail }).populate("project_tasks");
-    for (let i = 0; i < allProject.length; i++) {
-      const allTasks = await taskSchema.find({projectId:allProject[i]._id});  
-      Array.prototype.push.apply(allProject[i].project_tasks, allTasks);  
-    }
-
-    if (allProject) {
-      res.status(200).json({
-        success: true,
-        message: "Client projects",
-        assignedProjects: allProject,
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: "No projects found for client",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
 
 module.exports = {
   signUp,
@@ -340,5 +311,5 @@ module.exports = {
   updateUserClientDetails,
   deleteUserClient,
   getUserAssignedProjects,
-  getUserClientProjects
+
 };
