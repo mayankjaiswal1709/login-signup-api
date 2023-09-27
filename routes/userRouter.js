@@ -13,6 +13,7 @@ userRouter.patch("/updateuserclinetdetails/:_id/:userRole?", isClient,user.updat
 userRouter.delete("/deleteuserclinet/:_id/:userRole?", isClient,user.deleteUserClient);
 // In your user route
 userRouter.get('/assignedprojects/:uid',  user.getUserAssignedProjects);
+// userRouter.get("/userclients/:emailId/:userRole?", isClient, user.getUserClientProjects);
 
 module.exports = userRouter;
 

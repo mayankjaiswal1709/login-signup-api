@@ -1,5 +1,6 @@
 const userSchema = require("../models/userSchema");
 const ProjectSchema = require("../models/projectSchema");
+const taskSchema = require("../models/taskSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -180,30 +181,45 @@ const getUserByName = async (req,res)=>{
     })
   }
 } 
+// const { _id } = req.params;
+//     const userClient = await userSchema.findById({ _id })
+//     console.log(userClient);
 // get userclient details by id
-const getuserClientbyId = async (req, res) => {
-  try {
-    const { _id } = req.params;
+const getuserClientbyId = async (req, res) =>{
+  const { _id } = req.params;
     const userClient = await userSchema.findById({ _id })
-    if (userClient ) {
+    console.log(userClient);
+  const clientEmail = userClient.userEmail
+  console.log(_id);
+
+  try {
+  
+    const allProject = await ProjectSchema.find({ clientEmail }).populate("project_tasks");
+    for (let i = 0; i < allProject.length; i++) {
+      const allTasks = await taskSchema.find({projectId:allProject[i]._id});  
+      Array.prototype.push.apply(allProject[i].project_tasks, allTasks);  
+    }
+
+    if (allProject) {
       res.status(200).json({
         success: true,
-        message: "Client Details listed below ",
-        ClientDetails: userClient,
+        message: "Client projects",
+        assignedProjects: allProject,
       });
     } else {
       res.status(404).json({
         success: false,
-        message: "no Clinet found",
+        message: "No projects found for client",
       });
     }
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       error: error.message,
     });
   }
-};
+}
+  
 // ==========================
 // update client details
 const updateUserClientDetails = async (req, res) => {
@@ -283,7 +299,37 @@ const getUserAssignedProjects = async (req, res) => {
     });
   }
 };
+// ==========================================
+const getUserClientProjects = async (req, res) => {
+  const clientEmail = req.params.emailId;
 
+  try {
+  
+    const allProject = await ProjectSchema.find({ clientEmail }).populate("project_tasks");
+    for (let i = 0; i < allProject.length; i++) {
+      const allTasks = await taskSchema.find({projectId:allProject[i]._id});  
+      Array.prototype.push.apply(allProject[i].project_tasks, allTasks);  
+    }
+
+    if (allProject) {
+      res.status(200).json({
+        success: true,
+        message: "Client projects",
+        assignedProjects: allProject,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "No projects found for client",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   signUp,
@@ -293,5 +339,6 @@ module.exports = {
   getUserByName,
   updateUserClientDetails,
   deleteUserClient,
-  getUserAssignedProjects
+  getUserAssignedProjects,
+  getUserClientProjects
 };
