@@ -5,6 +5,7 @@ const validate = require('../validator/userValidate/userValidate')
 const { isUser, isAdmin, isClient, isAdminAndUser } = require('../middleware/authorization')
 
 userRouter.post("/signup", user.signUp);
+
 userRouter.post("/userlogin", user.userLogin);
 userRouter.get("/alluserlist/:userRole?",isAdmin, user.allUsersList);
 userRouter.get("/userbyname/:userName/:userRole?", isAdmin,user.getUserByName);

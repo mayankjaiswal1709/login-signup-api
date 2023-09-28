@@ -54,7 +54,7 @@ const signUp = async (req, res) => {
   }
 };
 //--------------------
-// const signUp = async (req, res) => {
+// const signUpasAdmin = async (req, res) => {
 //   const registerData = new userSchema(req.body);
   
 //   try {
@@ -193,9 +193,9 @@ const getuserClientbyId = async (req, res) =>{
   try {
     const { _id } = req.params;
     const userClient = await userSchema.findById({ _id })
-    console.log(userClient);
+    // console.log(userClient);
   const clientEmail = userClient.userEmail
-  
+
     const allProject = await ProjectSchema.find({ clientEmail }).populate("project_tasks");
     for (let i = 0; i < allProject.length; i++) {
       const allTasks = await taskSchema.find({projectId:allProject[i]._id});  

@@ -1,7 +1,6 @@
 const express = require('express')
 const clientSchema = require('../models/clientSchema')
 const ProjectSchema = require("../models/projectSchema");
-// const ProjectSchema = require("../models/projectSchema");
 // const uploads = require('../middleware/multer')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
@@ -11,7 +10,44 @@ const { userInfo } = require('os');
 const userSchema = require('../models/userSchema');
 const projectSchema = require('../models/projectSchema');
 const { log } = require('console');
+const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
 
+
+// user adminlogin API
+const adminLogin = async (req, res) => {
+  const { userEmail, userPassword } = req.body
+  try {
+      const userData = await userSchema.findOne({ userEmail: userEmail})
+      if (!userData) {
+          return res.status(400).json({
+              success: false,
+              message: "Email id not found"
+          })
+      } else {
+          const passwordMatch = await bcrypt.compare(userPassword, userData.userPassword)
+          if (userData && passwordMatch) {
+              const token = jwt.sign({ userId: userData._id }, process.env.JWT, { expiresIn: "5d" })
+              return res.status(200).json({
+                  success: true,
+                  message: "Login successfully",
+                  token: token,
+                  userId: userData._id
+              })
+          } else {
+              return res.status(401).json({
+                  success: false,
+                  message: "Invalid email or password"
+              })
+          }
+      }
+  } catch (err) {
+      return res.status(500).json({
+          success: false,
+          error: err.message
+      })
+  }
+}
 // add Task api
 const addClient = async (req, res) => {
     const clientData = new clientSchema(req.body);
@@ -220,6 +256,7 @@ const getClientProjects = async (req, res) => {
 module.exports = { 
   addClient,
   getAllClients,
+  adminLogin,
   getClientbyId,
   updateClientDetails,
   deleteClient,
