@@ -132,6 +132,42 @@ const userLogin = async (req, res) => {
   }
 }
 
+
+// user adminlogin API
+const adminLogin = async (req, res) => {
+  const { userEmail, userPassword } = req.body
+  try {
+      const userData = await userSchema.findOne({ userEmail: userEmail})
+      if (!userData) {
+          return res.status(400).json({
+              success: false,
+              message: "Email id not found"
+          })
+      } else {
+          const passwordMatch = await bcrypt.compare(userPassword, userData.userPassword)
+          if (userData && passwordMatch) {
+              const token = jwt.sign({ userId: userData._id }, process.env.JWT, { expiresIn: "5d" })
+              return res.status(200).json({
+                  success: true,
+                  message: "Login successfully",
+                  token: token,
+                  userId: userData._id
+              })
+          } else {
+              return res.status(401).json({
+                  success: false,
+                  message: "Invalid email or password"
+              })
+          }
+      }
+  } catch (err) {
+      return res.status(500).json({
+          success: false,
+          error: err.message
+      })
+  }
+}
+
 // get all user list 
 const allUsersList = async(req,res)=>{
   try {
@@ -306,6 +342,7 @@ const getUserAssignedProjects = async (req, res) => {
 module.exports = {
   signUp,
   userLogin,
+  adminLogin,
   allUsersList,
   getuserClientbyId,
   getUserByName,
